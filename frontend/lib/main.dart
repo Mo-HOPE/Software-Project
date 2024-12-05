@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:outfit_on/views/splash_view.dart';
+import 'package:frontend/views/splash_view.dart';
 
 void main() {
   runApp(const OutfitOn());
