@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:outfit_on/views/auth_view.dart';
-import 'package:outfit_on/views/login_view.dart';
-import 'package:outfit_on/widgets/Signup_form.dart';
+import 'package:frontend/views/auth_view.dart';
+import 'package:frontend/views/login_view.dart';
+import 'package:frontend/widgets/Signup_form.dart';
 import '../../../constants.dart';
 
 class SignUpView extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:outfit_on/views/signup_view.dart';
-import 'package:outfit_on/widgets/logo_widget.dart';
+import 'package:frontend/views/user_type_view.dart';
+import 'package:frontend/widgets/logo_widget.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              const SignUpView(),
+              const UserTypeSelectionView(),
           transitionDuration: const Duration(seconds: 1),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
