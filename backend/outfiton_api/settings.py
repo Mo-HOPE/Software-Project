@@ -77,8 +77,8 @@ WSGI_APPLICATION = 'outfiton_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'ECommerceDB',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': '',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
