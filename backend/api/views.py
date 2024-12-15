@@ -48,6 +48,18 @@ class ResetCustomerPasswordView(APIView):
             return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class DeleteCustomerView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            customer = Customer.objects.get(email=email)
+            customer.delete()
+            return Response({"message": "Customer deleted successfully"}, status=status.HTTP_200_OK)
+        except Customer.DoesNotExist:
+            return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
+
     def delete(self, request):
         email = request.data.get('email')
         if not email:
