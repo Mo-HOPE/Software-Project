@@ -69,6 +69,7 @@ TEMPLATES = [
     },
 ]
 
+STATIC_ROOT = BASE_DIR/'staticfiles'
 WSGI_APPLICATION = 'outfiton_api.wsgi.application'
 
 
@@ -77,16 +78,9 @@ WSGI_APPLICATION = 'outfiton_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'ECommerceDB',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-        'OPTIONS': {
-            'driver': '',
-    },
-}
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
