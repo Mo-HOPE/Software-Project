@@ -9,4 +9,6 @@ urlpatterns = [
     path('login-seller/', LoginSellerView.as_view(), name='login_seller'),
     path('create-seller/', CreateSellerView.as_view(), name='create_seller'),
     path('reset-seller-password/', ResetSellerPasswordView.as_view(), name='reset_seller_password'),
+    path('send-otp/', SendOtpView.as_view(), name='send_otp'),
+
 ]

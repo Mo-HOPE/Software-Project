@@ -1,4 +1,6 @@
-from django.shortcuts import render
+import random
+from django.core.mail import send_mail
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,6 +8,27 @@ from .models import Customer, Seller
 from .serializers import CustomerSerializer, SellerSerializer
 from django.contrib.auth.hashers import make_password, check_password
 
+class SendOtpView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        
+        if not email:
+            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        otp = str(random.randint(100000, 999999))
+
+        subject = "Your Verification Code"
+        message = f"Your OTP code is {otp}. It will expire in 10 minutes."
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [email]
+
+        try:
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+        except Exception as e:
+            return Response({"error": f"Failed to send email: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return Response({"message": "OTP sent successfully", "otp": otp}, status=status.HTTP_200_OK)
+    
 
 class LoginCustomerView(APIView):
     def post(self, request):
