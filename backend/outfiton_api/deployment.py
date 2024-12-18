@@ -83,6 +83,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-DEFAULT_FROM_EMAIL = f"Your App <{os.environ.get('EMAIL_USER')}>"
+DEFAULT_FROM_EMAIL = f"OutfitOn <{os.environ.get('EMAIL_USER')}>"
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR/'staticfiles'
