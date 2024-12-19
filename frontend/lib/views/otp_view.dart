@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+<<<<<<< HEAD
 import 'package:frontend/cubits/auth/auth_cubit.dart';
 import 'package:frontend/cubits/auth/auth_states.dart';
 import 'package:frontend/views/home_view.dart';
@@ -20,6 +21,15 @@ class OtpVerificationView extends StatelessWidget {
     final cubit = context.read<OtpVerificationCubit>();
     cubit.resendOtp();
   }
+=======
+import 'package:frontend/views/home_view.dart';
+
+class OtpVerificationView extends StatelessWidget {
+  final TextEditingController _otpController = TextEditingController();
+
+  OtpVerificationView({Key? key}) : super(key: key);
+
+>>>>>>> 689abbc099bc4bb9dace3e5f3f8a386b1f2450af
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +43,7 @@ class OtpVerificationView extends StatelessWidget {
         ),
         backgroundColor: Colors.purple,
       ),
+<<<<<<< HEAD
       body: BlocConsumer<OtpVerificationCubit, OtpVerificationState>(
         listener: (context, state) async {
           if (state is OtpVerificationSuccess) {
@@ -66,6 +77,9 @@ class OtpVerificationView extends StatelessWidget {
           }
 
           return Center(
+=======
+      body: return Center(
+>>>>>>> 689abbc099bc4bb9dace3e5f3f8a386b1f2450af
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -103,7 +117,11 @@ class OtpVerificationView extends StatelessWidget {
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
+<<<<<<< HEAD
                             onPressed: () => _verifyOtp(context),
+=======
+                            onPressed: () => ,
+>>>>>>> 689abbc099bc4bb9dace3e5f3f8a386b1f2450af
                             style: ButtonStyle(
                               backgroundColor:
                                   WidgetStateProperty.all(Colors.purple),
@@ -123,7 +141,11 @@ class OtpVerificationView extends StatelessWidget {
                           children: [
                             const Text("Didn’t get the code?"),
                             TextButton(
+<<<<<<< HEAD
                               onPressed: () => _resendOtp(context),
+=======
+                              onPressed: () =>,
+>>>>>>> 689abbc099bc4bb9dace3e5f3f8a386b1f2450af
                               child: const Text('Resend OTP'),
                             ),
                           ],
