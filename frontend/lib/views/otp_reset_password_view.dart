@@ -8,7 +8,6 @@ class OtpResetPasswordView extends StatelessWidget {
   final String email;
   final String password;
 
-<<<<<<< HEAD
   OtpResetPasswordView({
     Key? key,
     required this.correctOtp,
@@ -55,8 +54,6 @@ class OtpResetPasswordView extends StatelessWidget {
     }
   }
 
-=======
->>>>>>> 689abbc099bc4bb9dace3e5f3f8a386b1f2450af
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +95,6 @@ class OtpResetPasswordView extends StatelessWidget {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-<<<<<<< HEAD
                       onPressed: () async {
                         if (_verifyOtp()) {
                           await _changePassword(context);
@@ -110,10 +106,6 @@ class OtpResetPasswordView extends StatelessWidget {
                           );
                         }
                       },
-=======
-                      onPressed: ()  {
-                      }
->>>>>>> 689abbc099bc4bb9dace3e5f3f8a386b1f2450af
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple,
                       ),
@@ -132,11 +124,7 @@ class OtpResetPasswordView extends StatelessWidget {
                     children: [
                       const Text("Didn’t get the code?"),
                       TextButton(
-<<<<<<< HEAD
                         onPressed: () async => await _resendOtp(context),
-=======
-                        onPressed: () => ,
->>>>>>> 689abbc099bc4bb9dace3e5f3f8a386b1f2450af
                         child: const Text('Resend OTP'),
                       ),
                     ],
