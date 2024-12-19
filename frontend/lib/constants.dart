@@ -7,8 +7,12 @@ final nameValidator = MultiValidator([
 ]);
 
 final emaildValidator = MultiValidator([
-  RequiredValidator(errorText: 'an Email is required'),
+  RequiredValidator(errorText: 'An email is required'),
   EmailValidator(errorText: "Enter a valid email address"),
+  PatternValidator(
+    r'^[a-zA-Z0-9._%+-]+@gmail\.com$',
+    errorText: "Email must be a Gmail address",
+  ),
 ]);
 
 final passwordValidator = MultiValidator([

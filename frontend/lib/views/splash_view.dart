@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:frontend/views/home_view.dart';
 import 'package:frontend/views/user_type_view.dart';
 import 'package:frontend/widgets/logo_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashView extends StatefulWidget {
-  const SplashView({Key? key}) : super(key: key);
+  final SharedPreferences prefs;
+
+  const SplashView({Key? key, required this.prefs}) : super(key: key);
 
   @override
   State<SplashView> createState() => _SplashViewState();
@@ -17,6 +21,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _checkUserStatus();
 
     _slideController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
@@ -27,28 +32,30 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     ));
 
     _slideController.forward();
-
-    Timer(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const UserTypeSelectionView(),
-          transitionDuration: const Duration(seconds: 1),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        ),
-      );
-    });
   }
 
   @override
   void dispose() {
     _slideController.dispose();
     super.dispose();
+  }
+
+  void _checkUserStatus() {
+    final String? userEmail = widget.prefs.getString('user_email');
+    if (userEmail != null) {
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeView(email: userEmail)),
+        );
+      });
+    } else {
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+              builder: (context) => const UserTypeSelectionView()),
+        );
+      });
+    }
   }
 
   @override
