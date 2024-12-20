@@ -4,8 +4,8 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Customer, Seller
-from .serializers import CustomerSerializer, SellerSerializer
+from .models import Customer, Seller, Product
+from .serializers import CustomerSerializer, SellerSerializer, ProductSerializer
 from django.contrib.auth.hashers import make_password, check_password
 
 class SendOtpView(APIView):
@@ -28,7 +28,6 @@ class SendOtpView(APIView):
             return Response({"error": f"Failed to send email: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         return Response({"message": "OTP sent successfully", "otp": otp}, status=status.HTTP_200_OK)
-    
 
 class LoginCustomerView(APIView):
     def post(self, request):
@@ -108,11 +107,6 @@ class LoginSellerView(APIView):
         except Seller.DoesNotExist:
             return Response({"error": "Seller not found"}, status=status.HTTP_404_NOT_FOUND)
 
-
-
-
-
-
 class CreateSellerView(APIView):
     def post(self, request):
         data = request.data
@@ -139,3 +133,35 @@ class ResetSellerPasswordView(APIView):
             return Response({"error": "Seller not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class PutProductView(APIView):
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Product added successfully", "product": serializer.data}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetProductsView(APIView):
+    def get(self, request, category):
+        if category not in ['men', 'women', 'children']:
+            return Response({"error": "Invalid category"}, status=status.HTTP_400_BAD_REQUEST)
+
+        products = Product.objects.filter(category=category)
+        serialized_products = ProductSerializer(products, many=True)
+
+        result = [{
+            "id": product["id"],
+            "name": product["name"],
+            "seller": product["seller"],
+            "category": product["category"],
+            "description": product["description"],
+            "photo": product["photo"],
+            "stock_quantity": product["stock_quantity"],
+            "price": product["price"],
+            "discount": product["discount"],
+            "keywords": product["keywords"],
+            "sizes_list": product["sizes_list"]
+        } for product in serialized_products.data]
+
+        return Response(result, status=status.HTTP_200_OK)
