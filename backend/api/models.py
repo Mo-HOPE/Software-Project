@@ -17,3 +17,18 @@ class Seller(models.Model):
 
     def __str__(self):
         return self.brand_name
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    seller = models.CharField(max_length=255)
+    category = models.CharField(max_length=50, choices=[('men', 'Men'), ('women', 'Women'), ('children', 'Children')])
+    description = models.TextField()
+    photo = models.URLField()
+    stock_quantity = models.IntegerField()
+    price = models.FloatField()
+    discount = models.FloatField()
+    keywords = models.JSONField(default=list)
+    sizes_list = models.JSONField(default=list)
+
+    def __str__(self):
+        return self.name

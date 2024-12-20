@@ -10,5 +10,6 @@ urlpatterns = [
     path('create-seller/', CreateSellerView.as_view(), name='create_seller'),
     path('reset-seller-password/', ResetSellerPasswordView.as_view(), name='reset_seller_password'),
     path('send-otp/', SendOtpView.as_view(), name='send_otp'),
-
+    path('put-product/', PutProductView.as_view(), name='put_product'),
+    path('get-products/<str:category>/', GetProductsView.as_view(), name='get_products_by_category'),
 ]
