@@ -47,7 +47,7 @@ class OtpVerificationView extends StatelessWidget {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeView(email: email),
+                builder: (context) => const HomeView(),
               ),
               (Route<dynamic> route) => false,
             );

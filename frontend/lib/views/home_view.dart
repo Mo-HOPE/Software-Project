@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/product_card.dart';
 import 'package:google_fonts/google_fonts.dart';
+<<<<<<< HEAD
+
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+=======
 
 <<<<<<< HEAD
 class HomeView extends StatefulWidget {
@@ -28,6 +50,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
 <<<<<<< HEAD
+>>>>>>> 318375094d6d604464da1b58f9543f996e16e9a6
       appBar: AppBar(
         title: const Text('OutfitOn'),
         titleTextStyle: GoogleFonts.playfairDisplay(
@@ -81,11 +104,14 @@ class _HomeViewState extends State<HomeView> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.purple,
         onTap: _onItemTapped,
+<<<<<<< HEAD
+=======
 =======
       body: Center(
         child:
             Text("$email", style: Theme.of(context).textTheme.headlineMedium),
 >>>>>>> 38d8364775d8c37b5cf5c2e1abdeeea01aeb1765
+>>>>>>> 318375094d6d604464da1b58f9543f996e16e9a6
       ),
     );
   }
