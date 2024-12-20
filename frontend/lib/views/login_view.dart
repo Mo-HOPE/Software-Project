@@ -41,7 +41,7 @@ class _LoginViewState extends State<LoginView> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeView(email: _emailController.text.trim()),
+          builder: (context) => const HomeView(),
         ),
         (Route<dynamic> route) => false,
       );

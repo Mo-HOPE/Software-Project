@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class logo_widget extends StatelessWidget {
   const logo_widget({
@@ -26,13 +27,12 @@ class logo_widget extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         // App Name
-        const Text(
+        Text(
           "OutfitOn",
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            fontFamily: "Times new roman",
+          style: GoogleFonts.playfairDisplay(
             color: Colors.white,
+            fontSize: 32.0,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],

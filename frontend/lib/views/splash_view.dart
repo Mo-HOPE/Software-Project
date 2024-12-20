@@ -45,7 +45,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
     if (userEmail != null) {
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeView(email: userEmail)),
+          MaterialPageRoute(builder: (context) => const HomeView()),
         );
       });
     } else {
