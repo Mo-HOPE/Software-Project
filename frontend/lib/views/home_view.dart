@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:frontend/widgets/product_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+<<<<<<< HEAD
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
+=======
+class HomeView extends StatelessWidget {
+  const HomeView({super.key, required this.email});
+  final String email;
+>>>>>>> 38d8364775d8c37b5cf5c2e1abdeeea01aeb1765
   @override
   State<HomeView> createState() => _HomeViewState();
 }
@@ -21,6 +27,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       appBar: AppBar(
         title: const Text('OutfitOn'),
         titleTextStyle: GoogleFonts.playfairDisplay(
@@ -74,6 +81,11 @@ class _HomeViewState extends State<HomeView> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.purple,
         onTap: _onItemTapped,
+=======
+      body: Center(
+        child:
+            Text("$email", style: Theme.of(context).textTheme.headlineMedium),
+>>>>>>> 38d8364775d8c37b5cf5c2e1abdeeea01aeb1765
       ),
     );
   }

@@ -8,6 +8,52 @@ class OtpResetPasswordView extends StatelessWidget {
   final String email;
   final String password;
 
+  OtpResetPasswordView({
+    Key? key,
+    required this.correctOtp,
+    required this.email,
+    required this.password,
+  }) : super(key: key);
+
+  bool _verifyOtp() {
+    return correctOtp == _otpController.text.trim();
+  }
+
+  Future<void> _resendOtp(BuildContext context) async {
+    try {
+      final otpResponse = await ApiService().sendOtp(email: email);
+      correctOtp = otpResponse.data['otp'];
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('OTP resent successfully! Check your email.')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Failed to resend OTP. Please try again.')),
+      );
+    }
+  }
+
+  Future<void> _changePassword(BuildContext context) async {
+    try {
+      await ApiService().resetPassword(email: email, newPassword: password);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password changed successfully!')),
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginView()),
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Failed to change password. Please try again.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +95,17 @@ class OtpResetPasswordView extends StatelessWidget {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: ()  {
-                      }
+                      onPressed: () async {
+                        if (_verifyOtp()) {
+                          await _changePassword(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                    Text('Invalid OTP. Please try again.')),
+                          );
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple,
                       ),
@@ -69,7 +124,7 @@ class OtpResetPasswordView extends StatelessWidget {
                     children: [
                       const Text("Didn’t get the code?"),
                       TextButton(
-                        onPressed: () => ,
+                        onPressed: () async => await _resendOtp(context),
                         child: const Text('Resend OTP'),
                       ),
                     ],
