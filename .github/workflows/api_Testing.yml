@@ -1,11 +1,11 @@
 name: API Testing
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-    
+  workflow_run:
+    workflows: ["main_ouitfiton.yml"]
+    types:
+      - completed
+
 jobs:
   test:
     runs-on: windows-latest
@@ -26,4 +26,3 @@ jobs:
       - name: Run tests
         run: |
           python -m unittest discover -s . -p "test_*.py"
-          
