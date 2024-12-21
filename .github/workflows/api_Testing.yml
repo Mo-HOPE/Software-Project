@@ -11,19 +11,18 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2  
 
-      - name: Setup Python
+      - name: Set up Python environment
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
       - name: Install dependencies
         run: |
-          cd Testing
           python -m pip install --upgrade pip
 
       - name: Run tests
         run: |
-          cd Testing
-          python -m unittest discover -s -p "test_*.py"
+          python -m unittest discover -s . -p "test_*.py"
+          
