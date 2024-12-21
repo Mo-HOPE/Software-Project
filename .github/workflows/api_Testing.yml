@@ -20,8 +20,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd Testing
           python -m pip install --upgrade pip
 
       - name: Run tests
         run: |
-          python -m unittest discover -s Testing  -p "test_*.py"
+          cd Testing
+          python -m unittest discover -s -p "test_*.py"
