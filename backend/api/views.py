@@ -71,36 +71,6 @@ class ResetCustomerPasswordView(APIView):
 
 
 
-class UpdateCustomerInfoView(APIView):
-    def put(self, request):
-        email = request.data.get('email')
-        name = request.data.get('name')
-        phone = request.data.get('phone')
-        address = request.data.get('address')
-        cart_products = request.data.get('cart_products')
-        wishlist_products = request.data.get('wishlist_products')
-
-        if not email:
-            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            customer = Customer_User.objects.get(email=email)
-            if name:
-                customer.name = name
-            if phone:
-                customer.phone = phone
-            if address:
-                customer.address = address
-            if cart_products is not None:
-                customer.cart_products = cart_products
-            if wishlist_products is not None:
-                customer.wishlist_products = wishlist_products
-
-            customer.save()
-            return Response({"message": "Customer information updated successfully"}, status=status.HTTP_200_OK)
-        except Customer_User.DoesNotExist:
-            return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
-
 class GetCustomerInfoView(APIView):
     def get(self, request, email):
         try:
@@ -111,8 +81,6 @@ class GetCustomerInfoView(APIView):
                 "id": customer_data["id"],
                 "name": customer_data["name"],
                 "email": customer_data["email"],
-                "phone": customer_data["phone"],
-                "address": customer_data["address"],
                 "wishlist_products": customer_data["wishlist_products"],
                 "cart_products": customer_data["cart_products"],
             }
