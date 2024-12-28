@@ -13,10 +13,13 @@ urlpatterns = [
     path('put-product/', PutProductView.as_view(), name='put_product'),
     path('get-products/<str:category>/', GetProductsView.as_view(), name='get_products_by_category'),
     path('search-products/<str:keyword>/', SearchProductKeywordsView.as_view(), name='search_product_keywords'),
+    path('delete-product/', DeleteProductView.as_view(), name='delete_product'),
     path('update-customer-info/', UpdateCustomerInfoView.as_view(), name='update_customer_info'),
     path('get-customer-info/<str:email>/', GetCustomerInfoView.as_view(), name='get_customer_info'),
     path('get-product-info/<int:product_id>/', GetProductInfoView.as_view(), name='get_product_info'),
 
 
 ]
+
+
 

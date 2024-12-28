@@ -266,3 +266,15 @@ class GetProductInfoView(APIView):
         except Product.DoesNotExist:
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
+class DeleteProductView(APIView):
+    def post(self, request):
+        id = request.data.get('id')
+        if not id:
+            return Response({"error": "id is required"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            product = Product.objects.get(id=id)
+            product.delete()
+            return Response({"message": "Product deleted successfully"}, status=status.HTTP_200_OK)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+        
