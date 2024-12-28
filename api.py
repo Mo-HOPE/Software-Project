@@ -1,7 +1,7 @@
 import requests
 
 class API:
-    BASE_URL = "https://ouitfiton-h3akced7ffevhfcs.canadacentral-01.azurewebsites.net/api/"
+    BASE_URL = "https://outfitonv2-hqdnefb7hfdtg2gm.canadacentral-01.azurewebsites.net/api/"
 
     def __init__(self):
         pass

@@ -2,7 +2,7 @@ name: API Testing
 
 on:
   workflow_run:
-    workflows: ["Build and deploy Python app to Azure Web App - OuitfitOn"]
+    workflows: ["Build and deploy Python app to Azure Web App - outfitonv2"]
     types:
       - completed
 

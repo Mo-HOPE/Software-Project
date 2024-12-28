@@ -4,7 +4,7 @@ from .models import *
 class Customer_UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer_User
-        fields = ['id', 'name', 'email','wishlist_products', 'cart_products']
+        fields = ['id', 'name', 'email', 'password','wishlist_products', 'cart_products']
 
 class SellerSerializer(serializers.ModelSerializer):
     class Meta:
