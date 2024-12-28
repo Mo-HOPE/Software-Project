@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Customer, Seller, Product
-from .serializers import CustomerSerializer, SellerSerializer, ProductSerializer
+from .serializers import *
 from django.contrib.auth.hashers import make_password, check_password
 
 class SendOtpView(APIView):
@@ -68,6 +68,58 @@ class ResetCustomerPasswordView(APIView):
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class UpdateCustomerInfoView(APIView):
+    def put(self, request):
+        email = request.data.get('email')
+        name = request.data.get('name')
+        phone = request.data.get('phone')
+        address = request.data.get('address')
+        cart_products = request.data.get('cart_products')
+        wishlist_products = request.data.get('wishlist_products')
+
+        if not email:
+            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            customer = Customer.objects.get(email=email)
+            if name:
+                customer.name = name
+            if phone:
+                customer.phone = phone
+            if address:
+                customer.address = address
+            if cart_products is not None:
+                customer.cart_products = cart_products
+            if wishlist_products is not None:
+                customer.wishlist_products = wishlist_products
+
+            customer.save()
+            return Response({"message": "Customer information updated successfully"}, status=status.HTTP_200_OK)
+        except Customer.DoesNotExist:
+            return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class GetCustomerInfoView(APIView):
+    def get(self, request, email):
+        try:
+            customer = Customer.objects.get(email=email)
+            serializer = CustomerSerializer(customer)
+            customer_data = serializer.data
+            result = {
+                "id": customer_data["id"],
+                "name": customer_data["name"],
+                "email": customer_data["email"],
+                "phone": customer_data["phone"],
+                "address": customer_data["address"],
+                "wishlist_products": customer_data["wishlist_products"],
+                "cart_products": customer_data["cart_products"],
+            }
+            return Response(result, status=status.HTTP_200_OK)
+        except Customer.DoesNotExist:
+            return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class DeleteCustomerView(APIView):
     def post(self, request):
@@ -165,3 +217,52 @@ class GetProductsView(APIView):
         } for product in serialized_products.data]
 
         return Response(result, status=status.HTTP_200_OK)
+    
+class SearchProductKeywordsView(APIView):
+    def get(self, request, keyword):
+        products = Product.objects.filter(keywords__icontains=keyword)
+        serialized_products = ProductSerializer(products, many=True)
+        
+        result = [
+            {
+                "id": product["id"],
+                "name": product["name"],
+                "seller": product["seller"],
+                "category": product["category"],
+                "description": product["description"],
+                "photo": product["photo"],
+                "stock_quantity": product["stock_quantity"],
+                "price": product["price"],
+                "discount": product["discount"],
+                "keywords": product["keywords"],
+                "sizes_list": product["sizes_list"],
+            }
+            for product in serialized_products.data
+        ]
+        
+        return Response(result, status=status.HTTP_200_OK)
+    
+
+class GetProductInfoView(APIView):
+    def get(self, request, product_id):
+        try:
+            product = Product.objects.get(id=product_id)
+            serializer = ProductSerializer(product)
+            product_data = serializer.data
+            result = {
+                "id": product_data["id"],
+                "name": product_data["name"],
+                "seller": product_data["seller"],
+                "category": product_data["category"],
+                "description": product_data["description"],
+                "photo": product_data["photo"],
+                "stock_quantity": product_data["stock_quantity"],
+                "price": product_data["price"],
+                "discount": product_data["discount"],
+                "keywords": product_data["keywords"],
+                "sizes_list": product_data["sizes_list"],
+            }
+            return Response(result, status=status.HTTP_200_OK)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+

@@ -4,6 +4,10 @@ class Customer(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    wishlist_products = models.JSONField(default=list)
+    cart_products = models.JSONField(default=list)
 
     def __str__(self):
         return self.name
