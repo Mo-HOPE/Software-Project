@@ -4,7 +4,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Customer, Seller, Product
+from .models import Customer_User, Seller, Product
 from .serializers import *
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -34,19 +34,19 @@ class LoginCustomerView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
         try:
-            user = Customer.objects.get(email=email)
+            user = Customer_User.objects.get(email=email)
             if check_password(password, user.password):
                 return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-        except Customer.DoesNotExist:
+        except Customer_User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class CreateCustomerView(APIView):
     def post(self, request):
         data = request.data
         data['password'] = make_password(data['password'])
-        serializer = CustomerSerializer(data=data)
+        serializer = Customer_UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
@@ -60,11 +60,11 @@ class ResetCustomerPasswordView(APIView):
         if not email or not new_password:
             return Response({"error": "Email and new password are required"}, status=status.HTTP_400_BAD_REQUEST) 
         try:
-            user = Customer.objects.get(email=email)            
+            user = Customer_User.objects.get(email=email)            
             user.password = make_password(new_password)
             user.save()
             return Response({"message": "Password reset successfully"}, status=status.HTTP_200_OK)
-        except Customer.DoesNotExist:
+        except Customer_User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -84,7 +84,7 @@ class UpdateCustomerInfoView(APIView):
             return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            customer = Customer.objects.get(email=email)
+            customer = Customer_User.objects.get(email=email)
             if name:
                 customer.name = name
             if phone:
@@ -98,14 +98,14 @@ class UpdateCustomerInfoView(APIView):
 
             customer.save()
             return Response({"message": "Customer information updated successfully"}, status=status.HTTP_200_OK)
-        except Customer.DoesNotExist:
+        except Customer_User.DoesNotExist:
             return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class GetCustomerInfoView(APIView):
     def get(self, request, email):
         try:
-            customer = Customer.objects.get(email=email)
-            serializer = CustomerSerializer(customer)
+            customer = Customer_User.objects.get(email=email)
+            serializer = Customer_UserSerializer(customer)
             customer_data = serializer.data
             result = {
                 "id": customer_data["id"],
@@ -117,7 +117,7 @@ class GetCustomerInfoView(APIView):
                 "cart_products": customer_data["cart_products"],
             }
             return Response(result, status=status.HTTP_200_OK)
-        except Customer.DoesNotExist:
+        except Customer_User.DoesNotExist:
             return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
@@ -128,10 +128,10 @@ class DeleteCustomerView(APIView):
             return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            customer = Customer.objects.get(email=email)
+            customer = Customer_User.objects.get(email=email)
             customer.delete()
             return Response({"message": "Customer deleted successfully"}, status=status.HTTP_200_OK)
-        except Customer.DoesNotExist:
+        except Customer_User.DoesNotExist:
             return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request):
@@ -140,10 +140,10 @@ class DeleteCustomerView(APIView):
             return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            customer = Customer.objects.get(email=email)
+            customer = Customer_User.objects.get(email=email)
             customer.delete()
             return Response({"message": "Customer deleted successfully"}, status=status.HTTP_200_OK)
-        except Customer.DoesNotExist:
+        except Customer_User.DoesNotExist:
             return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class LoginSellerView(APIView):
