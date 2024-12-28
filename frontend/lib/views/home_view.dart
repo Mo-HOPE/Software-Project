@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/product_card.dart';
 import 'package:google_fonts/google_fonts.dart';
-<<<<<<< HEAD
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -22,35 +21,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-=======
-
-<<<<<<< HEAD
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
-
-=======
-class HomeView extends StatelessWidget {
-  const HomeView({super.key, required this.email});
-  final String email;
->>>>>>> 38d8364775d8c37b5cf5c2e1abdeeea01aeb1765
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-<<<<<<< HEAD
->>>>>>> 318375094d6d604464da1b58f9543f996e16e9a6
       appBar: AppBar(
         title: const Text('OutfitOn'),
         titleTextStyle: GoogleFonts.playfairDisplay(
@@ -73,10 +43,13 @@ class _HomeViewState extends State<HomeView> {
           itemCount: 10,
           itemBuilder: (context, index) {
             return ProductCard(
-              title: 'Product $index',
-              price: '\$${(index + 1) * 10}',
+              title: 'white hoddie with print $index',
+              price: '\$${((index + 1) * 20)}',
+              discount: index + 1,
+              onTap: () {},
+              sizes: const ["S", "M", "L", "XL"],
               imageUrl:
-                  'https://i8.amplience.net/i/jpl/jd_729932_a?qlt=92&w=950&h=1212&v=1&fmt=auto',
+                  'https://i.etsystatic.com/42307365/r/il/2adc70/5719289509/il_fullxfull.5719289509_27k7.jpg',
             );
           },
         ),
@@ -104,14 +77,6 @@ class _HomeViewState extends State<HomeView> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.purple,
         onTap: _onItemTapped,
-<<<<<<< HEAD
-=======
-=======
-      body: Center(
-        child:
-            Text("$email", style: Theme.of(context).textTheme.headlineMedium),
->>>>>>> 38d8364775d8c37b5cf5c2e1abdeeea01aeb1765
->>>>>>> 318375094d6d604464da1b58f9543f996e16e9a6
       ),
     );
   }
