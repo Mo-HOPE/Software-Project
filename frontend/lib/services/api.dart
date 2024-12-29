@@ -106,16 +106,26 @@ class ApiService {
     }
   }
 
-  // New getProducts function
   Future<List<ProductModel>> getProducts(String category) async {
     try {
       final response = await _dio.get('get-products/$category/');
       List<dynamic> data = response.data;
 
-      // Map API response to a list of ProductModel instances
       return data.map((product) => ProductModel.fromMap(product)).toList();
     } on DioException catch (e) {
-      // Handle specific Dio errors here if needed
+      throw Exception('Failed to fetch products: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  Future<List<ProductModel>> searchProducts(String keyword) async {
+    try {
+      final response = await _dio.get('search-products/$keyword/');
+      List<dynamic> data = response.data;
+
+      return data.map((product) => ProductModel.fromMap(product)).toList();
+    } on DioException catch (e) {
       throw Exception('Failed to fetch products: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
