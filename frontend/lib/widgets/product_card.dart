@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/product_model.dart';
+import 'package:frontend/views/product_info_view.dart';
 import 'package:frontend/widgets/DiscountBanner.dart';
 import 'package:frontend/widgets/sizes_box.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductCard extends StatelessWidget {
-  final String title;
-  final String price;
-  final String imageUrl;
-  final List<String> sizes;
-  final int discount;
-  final VoidCallback onTap;
-
+  final ProductModel product;
   const ProductCard({
     super.key,
-    required this.title,
-    required this.price,
-    required this.imageUrl,
-    required this.sizes,
-    required this.discount,
-    required this.onTap,
+    required this.product,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) {
+            return ProductInfoView(product: product);
+          },
+        ));
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -42,17 +39,24 @@ class ProductCard extends StatelessWidget {
                       top: Radius.circular(10.0),
                     ),
                     child: Image.network(
-                      imageUrl,
+                      product.photo,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.network(
+                          'https://thumbs.dreamstime.com/b/top-view-fashion-trendy-look-kids-clothes-103930087.jpg', // Path to your temporary fallback image
+                          fit: BoxFit.fill,
+                          width: double.infinity,
+                        );
+                      },
                       fit: BoxFit.fill,
                       width: double.infinity,
                     ),
                   ),
                   // Discount Banner
-                  if (discount > 0)
+                  if (product.discount > 0)
                     Positioned(
                       top: 10,
                       left: 10,
-                      child: DiscountBanner(discount: discount),
+                      child: DiscountBanner(discount: product.discount.toInt()),
                     ),
                 ],
               ),
@@ -67,7 +71,7 @@ class ProductCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          title,
+                          product.name,
                           style: GoogleFonts.raleway(
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
@@ -80,13 +84,13 @@ class ProductCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              price,
+                              product.priceAfterDiscount.toString(),
                               style: const TextStyle(
                                 color: Colors.purple,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizesBox(sizes: sizes),
+                            SizesBox(sizes: product.sizesList),
                           ],
                         ),
                       ],
