@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/models/customer_model.dart';
 import 'package:frontend/models/product_model.dart'; // Adjust the import based on your project structure
 
 class ApiService {
@@ -10,6 +11,21 @@ class ApiService {
       receiveTimeout: const Duration(seconds: 30),
     ),
   );
+
+  Future<CustomerModel> getCustomerInfo(String email) async {
+    try {
+      final response = await _dio.get('get-customer-info/$email/');
+      return CustomerModel.fromMap(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception('Error: ${e.response?.data['error'] ?? e.message}');
+      } else {
+        throw Exception('Failed to connect to the server: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
 
   Future<Response> createCustomer({
     required String email,

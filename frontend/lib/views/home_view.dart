@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/services/api.dart';
 import 'package:frontend/models/product_model.dart';
+import 'package:frontend/views/cart_view.dart';
+import 'package:frontend/views/profile_view.dart';
+import 'package:frontend/views/wishlish_view.dart';
 import 'package:frontend/widgets/custom_navigation_bar.dart';
 import 'package:frontend/widgets/error_message_widget.dart';
 import 'package:frontend/widgets/product_card.dart';
@@ -78,6 +81,27 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       _selectedIndex = index;
     });
+
+    switch (index) {
+      case 0:
+        // Stay on Home screen
+        break;
+      case 1:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const CartView()),
+        );
+        break;
+      case 2:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const WishlistView()),
+        );
+        break;
+      case 3:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const ProfileView()),
+        );
+        break;
+    }
   }
 
   @override

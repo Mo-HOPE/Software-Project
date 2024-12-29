@@ -3,7 +3,6 @@ import 'package:frontend/models/product_model.dart';
 import 'package:frontend/widgets/add_to_cart_button.dart';
 import 'package:frontend/widgets/product_details_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../global.dart';
 
 class ProductInfoView extends StatefulWidget {
   const ProductInfoView({super.key, required this.product});
@@ -20,36 +19,36 @@ class _ProductInfoViewState extends State<ProductInfoView> {
   @override
   void initState() {
     super.initState();
-    isWishlisted = globalCustomer.whishListProducts.contains(widget.product.id);
+    // isWishlisted = globalCustomer.whishListProducts.contains(widget.product.id);
   }
 
   void toggleWishlist() {
     setState(() {
-      if (isWishlisted) {
-        globalCustomer.whishListProducts.remove(widget.product.id);
-      } else {
-        globalCustomer.whishListProducts.add(widget.product.id);
-      }
+      // if (isWishlisted) {
+      //   globalCustomer.whishListProducts.remove(widget.product.id);
+      // } else {
+      //   globalCustomer.whishListProducts.add(widget.product.id);
+      // }
       isWishlisted = !isWishlisted;
     });
   }
 
-  void addToCart() {
-    if (!globalCustomer.cartProducts.contains(widget.product.id) &&
-        widget.product.stockQuantity > 0 &&
-        selectedSize != null) {
-      setState(() {
-        globalCustomer.cartProducts.add(widget.product.id);
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Product added to cart.')),
-      );
-    } else if (selectedSize == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a size.')),
-      );
-    }
-  }
+  // void addToCart() {
+  //   if (!globalCustomer.cartProducts.contains(widget.product.id) &&
+  //       widget.product.stockQuantity > 0 &&
+  //       selectedSize != null) {
+  //     setState(() {
+  //       globalCustomer.cartProducts.add(widget.product.id);
+  //     });
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Product added to cart.')),
+  //     );
+  //   } else if (selectedSize == null) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Please select a size.')),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +89,7 @@ class _ProductInfoViewState extends State<ProductInfoView> {
             const SizedBox(height: 16.0),
             AddToCartButton(
               isDisabled: widget.product.stockQuantity == 0,
-              onTap: addToCart,
+              onTap: () {},
             ),
           ],
         ),
