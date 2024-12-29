@@ -1,19 +1,25 @@
 class CustomerModel {
-  String name;
-  String email;
-  String password;
-  String address;
-  String phone;
-  List<int> cartProducts;
-  List<int> whishListProducts;
+  final int id;
+  final String name;
+  final String email;
+  final List<int> wishlistProducts;
+  final List<int> cartProducts;
 
   CustomerModel({
+    required this.id,
     required this.name,
     required this.email,
-    required this.password,
-    required this.address,
-    required this.phone,
+    required this.wishlistProducts,
     required this.cartProducts,
-    required this.whishListProducts,
   });
+
+  factory CustomerModel.fromMap(Map<String, dynamic> map) {
+    return CustomerModel(
+      id: map['id'],
+      name: map['name'],
+      email: map['email'],
+      wishlistProducts: List<int>.from(map['wishlist_products']),
+      cartProducts: List<int>.from(map['cart_products']),
+    );
+  }
 }

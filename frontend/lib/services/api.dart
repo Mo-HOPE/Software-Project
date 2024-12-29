@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/models/customer_model.dart';
 import 'package:frontend/models/product_model.dart'; // Adjust the import based on your project structure
 
 class ApiService {
@@ -10,6 +11,21 @@ class ApiService {
       receiveTimeout: const Duration(seconds: 30),
     ),
   );
+
+  Future<CustomerModel> getCustomerInfo(String email) async {
+    try {
+      final response = await _dio.get('get-customer-info/$email/');
+      return CustomerModel.fromMap(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception('Error: ${e.response?.data['error'] ?? e.message}');
+      } else {
+        throw Exception('Failed to connect to the server: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
 
   Future<Response> createCustomer({
     required String email,
@@ -106,16 +122,26 @@ class ApiService {
     }
   }
 
-  // New getProducts function
   Future<List<ProductModel>> getProducts(String category) async {
     try {
       final response = await _dio.get('get-products/$category/');
       List<dynamic> data = response.data;
 
-      // Map API response to a list of ProductModel instances
       return data.map((product) => ProductModel.fromMap(product)).toList();
     } on DioException catch (e) {
-      // Handle specific Dio errors here if needed
+      throw Exception('Failed to fetch products: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  Future<List<ProductModel>> searchProducts(String keyword) async {
+    try {
+      final response = await _dio.get('search-products/$keyword/');
+      List<dynamic> data = response.data;
+
+      return data.map((product) => ProductModel.fromMap(product)).toList();
+    } on DioException catch (e) {
       throw Exception('Failed to fetch products: ${e.message}');
     } catch (e) {
       throw Exception('Unexpected error: $e');
