@@ -88,6 +88,39 @@ class ApiService {
     }
   }
 
+  Future<void> updateCustomerInfo({
+    required String email,
+    String? name,
+    List<int>? wishlistProducts,
+    List<int>? cartProducts,
+  }) async {
+    try {
+      final response = await _dio.put(
+        'update-customer-info/',
+        data: {
+          'email': email,
+          'name': name,
+          'wishlist_products': wishlistProducts,
+          'cart_products': cartProducts,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Customer info updated successfully');
+      } else {
+        throw Exception('Failed to update customer info: ${response.data}');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception('Error: ${e.response?.data['error'] ?? e.message}');
+      } else {
+        throw Exception('Failed to connect to the server: ${e.message}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
   Future<Response> resetPassword({
     required String email,
     required String newPassword,
@@ -143,6 +176,21 @@ class ApiService {
       return data.map((product) => ProductModel.fromMap(product)).toList();
     } on DioException catch (e) {
       throw Exception('Failed to fetch products: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  Future<ProductModel> getProductInfo(int id) async {
+    try {
+      final response = await _dio.get('get-product-info/$id/');
+      return ProductModel.fromMap(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception('Error: ${e.response?.data['error'] ?? e.message}');
+      } else {
+        throw Exception('Failed to connect to the server: ${e.message}');
+      }
     } catch (e) {
       throw Exception('Unexpected error: $e');
     }

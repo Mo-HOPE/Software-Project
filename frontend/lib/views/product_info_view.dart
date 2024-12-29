@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/product_model.dart';
+import 'package:frontend/services/api.dart';
+import 'package:frontend/models/customer_model.dart';
 import 'package:frontend/widgets/add_to_cart_button.dart';
 import 'package:frontend/widgets/product_details_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductInfoView extends StatefulWidget {
   const ProductInfoView({super.key, required this.product});
@@ -13,42 +16,104 @@ class ProductInfoView extends StatefulWidget {
 }
 
 class _ProductInfoViewState extends State<ProductInfoView> {
+  final ApiService _apiService = ApiService();
+  CustomerModel? _customer;
   bool isWishlisted = false;
   String? selectedSize;
 
   @override
   void initState() {
     super.initState();
-    // isWishlisted = globalCustomer.whishListProducts.contains(widget.product.id);
+    _fetchCustomerInfo();
   }
 
-  void toggleWishlist() {
+  Future<void> _fetchCustomerInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('user_email');
+
+    if (email == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No email found')),
+      );
+      return;
+    }
+
+    try {
+      final customer = await _apiService.getCustomerInfo(email);
+      setState(() {
+        _customer = customer;
+        isWishlisted = customer.wishlistProducts.contains(widget.product.id);
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to fetch customer info: $e')),
+      );
+    }
+  }
+
+  Future<void> _updateCustomerInfo() async {
+    if (_customer == null) return;
+
+    try {
+      await _apiService.updateCustomerInfo(
+        email: _customer!.email,
+        name: _customer!.name,
+        wishlistProducts: _customer!.wishlistProducts,
+        cartProducts: _customer!.cartProducts,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update customer info: $e')),
+      );
+    }
+  }
+
+  void toggleWishlist() async {
+    if (_customer == null) return;
+
     setState(() {
-      // if (isWishlisted) {
-      //   globalCustomer.whishListProducts.remove(widget.product.id);
-      // } else {
-      //   globalCustomer.whishListProducts.add(widget.product.id);
-      // }
+      if (isWishlisted) {
+        _customer!.wishlistProducts.remove(widget.product.id);
+      } else {
+        _customer!.wishlistProducts.add(widget.product.id);
+      }
       isWishlisted = !isWishlisted;
     });
+
+    await _updateCustomerInfo();
   }
 
-  // void addToCart() {
-  //   if (!globalCustomer.cartProducts.contains(widget.product.id) &&
-  //       widget.product.stockQuantity > 0 &&
-  //       selectedSize != null) {
-  //     setState(() {
-  //       globalCustomer.cartProducts.add(widget.product.id);
-  //     });
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Product added to cart.')),
-  //     );
-  //   } else if (selectedSize == null) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Please select a size.')),
-  //     );
-  //   }
-  // }
+  void addToCart() async {
+    if (_customer == null || selectedSize == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            selectedSize == null
+                ? 'Please select a size.'
+                : 'Failed to add to cart.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (!_customer!.cartProducts.contains(widget.product.id) &&
+        widget.product.stockQuantity > 0) {
+      setState(() {
+        _customer!.cartProducts.add(widget.product.id);
+      });
+
+      await _updateCustomerInfo();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Product added to cart.')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Product already in cart.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +154,7 @@ class _ProductInfoViewState extends State<ProductInfoView> {
             const SizedBox(height: 16.0),
             AddToCartButton(
               isDisabled: widget.product.stockQuantity == 0,
-              onTap: () {},
+              onTap: addToCart,
             ),
           ],
         ),
