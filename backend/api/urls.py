@@ -15,6 +15,8 @@ urlpatterns = [
     path('search-products/<str:keyword>/', SearchProductKeywordsView.as_view(), name='search_product_keywords'),
     path('get-customer-info/<str:email>/', GetCustomerInfoView.as_view(), name='get_customer_info'),
     path('get-product-info/<int:product_id>/', GetProductInfoView.as_view(), name='get_product_info'),
+    path('update-customer-info/', UpdateCustomerInfoView.as_view(), name='update_customer_info'),
+
 
 
 ]
