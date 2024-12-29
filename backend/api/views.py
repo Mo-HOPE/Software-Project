@@ -42,6 +42,32 @@ class LoginCustomerView(APIView):
         except Customer_User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
+class UpdateCustomerInfoView(APIView):
+    def put(self, request):
+        email = request.data.get('email')
+        name = request.data.get('name')
+        cart_products = request.data.get('cart_products')
+        wishlist_products = request.data.get('wishlist_products')
+
+        if not email:
+            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            customer = Customer_User.objects.get(email=email)
+            if name:
+                customer.name = name
+
+            if cart_products is not None:
+                customer.cart_products = cart_products
+            if wishlist_products is not None:
+                customer.wishlist_products = wishlist_products
+
+            customer.save()
+            return Response({"message": "Customer information updated successfully"}, status=status.HTTP_200_OK)
+        except Customer_User.DoesNotExist:
+            return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
 class CreateCustomerView(APIView):
     def post(self, request):
         data = request.data
